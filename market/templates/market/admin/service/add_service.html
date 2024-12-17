@@ -1,0 +1,70 @@
+{% extends "../../admin/base.html" %}
+{% block header %}
+{{ form.media }}
+{% endblock header %}
+
+{% load static %}
+{% block stats %}{% endblock stats %}
+{% block main %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header">
+          <h5>Nouvel Service</h5>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                {{ form.photo.label_tag }}
+                {{ form.photo }}
+              </div>
+             <div class="col-md-6">
+                <img id="main-image-preview" src="#" alt="Aperçu de l'image principale" style="display:none; width: 50%;height:40%;">
+             </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                {{ form.titre.label_tag }}
+                {{ form.titre }}
+              </div>
+              <div class="col-md-6">
+                {{ form.service.label_tag }}
+                {{ form.service }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                {{ form.contenu.label_tag }}
+                {{ form.contenu }}
+              </div>
+            </div>
+           
+
+            
+          
+
+            <button type="submit" class="btn btn-primary btn-block mt-3">Enregistrer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Affichage de l'aperçu de l'image principale
+  document.getElementById('id_photo').onchange = function(event) {
+    const [file] = event.target.files;
+    if (file) {
+      const preview = document.getElementById('main-image-preview');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+  };
+</script>
+
+{% endblock main %}

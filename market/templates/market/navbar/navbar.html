@@ -1,0 +1,51 @@
+<!-- Upper Navbar -->
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom mt-0 mb-0 py-4 shadow-4" id="mainNavbar">
+    <div class="container">
+        <a class="navbar-brand me-2" href="">
+            <img src="" alt="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarButtonsExample"
+            aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars text-white"></i>
+        </button>
+
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-menu">
+            <li class="nav-item">
+                <a class="nav-link nav-link-home text-dark fw-bold" href="{% url 'market:homepage' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link nav-link-home text-dark fw-bold" href="{% url 'market:service_all' %}">Services</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark fw-bold" href="">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark fw-bold" href="{% url 'market:contact' %}">Contacts</a>
+            </li>
+        </ul>
+
+        <div class="d-flex align-items-center">
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
+              
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                        <div class="user-circle me-2 bg-light text-dark rounded-circle d-flex justify-content-center align-items-center" style="width: 35px; height: 35px;">
+                            {{ user.username|slice:":2" }}
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href=" ">Mon Profil</a></li>
+                        <li><a class="dropdown-item" href="{% url 'compte:logout' %}">Déconnexion</a></li>
+                    </ul>
+                </li>
+            </ul>
+            {% else %}
+            <a href="{% url 'compte:login' %}" class="d-inline-block text-light" aria-expanded="false">
+                <i class="fas fa-user fa-2x mx-2"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

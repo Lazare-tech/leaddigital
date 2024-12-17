@@ -1,0 +1,62 @@
+<section>
+    <div class="row">
+        <!-- First Card -->
+        <div class="col-xl-3 col-sm-3 col-4  mb-4">
+            <div class="card h-100 gradient-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between px-md-1">
+                        <div class="align-self-center stat-icon">
+                            <i class="fas fa-gavel text-info fa-3x stat-icone"></i>
+                        </div>
+                        <div class="text-end">
+                            {% if service %}
+                            <h3>{{nombre_service}}</h3>
+                            <p class="mb-0 stat-title text-white">Services</p>
+                            {% else %}
+                            <h3>Aucun service</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Second Card -->
+        <div class="col-xl-3 col-sm-3 col-4  mb-4">
+            <div class="card h-100 gradient-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between px-md-1">
+                        <div class="align-self-center stat-icon">
+                            <i class="fas fa-th-list text-warning fa-3x stat-icone"></i>
+                        </div>
+                        <div class="text-end">
+                            {% if categorie_service %}
+                            <h3>{{nombre_categorie_service}}</h3>
+                            <p class="mb-0 stat-title text-white">Categories d'service</p>
+                            {% else %}
+                            <p class="mb-0 stat-title">Aucune categorie</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Third Card -->
+        <div class="col-xl-3 col-sm-3 col-4 mb-4">
+            <div class="card h-100 gradient-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between px-md-1">
+                        <div class="align-self-center stat-icon">
+                            <i class="fas fa-map-marker-alt text-danger fa-3x stat-icone"></i>
+                        </div>
+                        <div class="text-end">
+                            <h6>Addresses</h6>
+                            <h6 class="mb-0 text-muted">{{ addresses.contact }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

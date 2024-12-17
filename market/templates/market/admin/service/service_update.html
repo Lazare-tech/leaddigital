@@ -1,0 +1,85 @@
+{% extends "../../admin/base.html" %}
+{% block header %}
+{{ form.media }}
+
+{% endblock header %}
+{% load form_helpers %}
+
+{% block main %}
+<div class="container mt-2">
+    <h4 class="text-center mb-4">Mettre à jour l'article </h4>
+    <div class="justify-content-center">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.photo.id_for_label }}" class="form-label text-muted">{{ form.photo.label }}</label>
+                    {{ form.photo }}
+                    {% if form.photo.errors %}
+                        <div class="text-danger">
+                            {% for error in form.photo.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                {% if form.instance.photo %}
+                    <img src="{{ form.instance.photo.url }}" alt="Image actuelle" class="img-fluid" style="max-width: 400px; height: auto;">
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mb-3">
+        
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.titre.slug_for_label }}" class="form-label text-muted">{{ form.titre.label }}</label>
+                    {{ form.titre|add_class:"form-control" }}
+                    {% if form.titre.errors %}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.titre.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.article.slug_for_label }}" class="form-label text-muted">{{ form.article.label }}</label>
+                    {{ form.article }}
+                    {% if form.article.errors %}
+                        <div class="text-danger">
+                            {% for error in form.article.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+        <div class="mb-3">
+            <div class="form-group">
+                <label for="{{ form.contenu.slug_for_label }}" class="form-label text-muted">{{ form.contenu.label }}</label>
+                {{ form.contenu }}
+                {% if form.contenu.errors %}
+                    <div class="text-danger">
+                        {% for error in form.contenu.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock main %}

@@ -1,0 +1,87 @@
+{% extends "../../admin/base.html" %}
+{% load form_helpers %}
+
+{% block main %}
+
+<section class="mb-4 mx-0">
+    <div class="card">
+      <div class="card-header text-center">
+        <h5 class="mb-0 text-center" id="produit">
+          <strong>Inventaire des categories</strong>
+        </h5>
+        {% if messages %}
+        <div id="alertMessage">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    
+        <div class="d-flex justify-content-end p-3" id="section-boisson">
+          <a href="{% url 'market:add_categorie_service' %}" class="btn btn-outline-success">
+            <i class="fas fa-plus fa-fw"></i><span>Ajouter une categorie</span>
+          </a>
+        </div>
+      </div>
+       <div class="card-body">
+        {% if categorie_service %}
+          <div class="table-responsive">
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th scope="col">Categorie Service</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for service in categorie_service %}
+                  <tr>
+                    <th scope="row">{{ service.nom_service }}</th>
+                    <td>
+                      <!-- Trigger button for delete modal -->
+                      <button class="btn" data-mdb-toggle="modal" data-mdb-target="#modalDelete{{ service.slug }}">
+                        <i class="fas fa-trash text-danger fa-1x"></i>
+                      </button>
+                      <a href="{% url 'market:update_categorie_service' service.slug %}" class="btn" data-mdb-ripple-init>
+                        <i class="fas fa-pencil-alt text-primary fa-1x"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+                  <!-- Delete Confirmation Modal -->
+                  <div class="modal fade" id="modalDelete{{ service.slug }}" tabindex="-1" aria-labelledby="modalDeleteLabel{{ service.slug }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                          <h5 class="modal-title" id="modalDeleteLabel{{ service.slug }}">Confirmer la suppression</h5>
+                          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Êtes-vous sûr de vouloir supprimer la catégorie <strong>{{ service.nom_service }}</strong>? Cette action est irréversible.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Annuler</button>
+                          <form method="POST" action="{% url 'market:delete_categorie_service' service.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End of Delete Confirmation Modal -->
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-center">Aucune categorie. <a href="">Ajoutez une categorie</a></p>
+        {% endif %}
+      </div> 
+    </div>
+  </section>
+  
+{% endblock main %}

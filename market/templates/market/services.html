@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Conception de site|Marketing Digital{% endblock title %}
+{% block content %}
+<div class="container p-5">
+<h4 class="text-muted">Services Marketing</h4>  
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for services_marketing in services_marketing %}
+  <div class="col">
+    <div class="card shadow-sm mb-4">
+      <!-- Image du service -->
+      <div class="card-header p-0">
+        <img src="{{ services_marketing.photo.url }}" alt="{{ services_marketing.titre }}" 
+             class="img-fluid rounded-top service-image">
+      </div>
+      
+      <!-- Contenu du service -->
+      <div class="card-body">
+        <h5 class="card-title">{{ services_marketing.titre }}</h5>
+        <p class="card-text text-muted">
+          {{ services_marketing.contenu|truncatewords:15 }} <!-- Limite à 15 mots -->
+        </p>
+      </div>
+  
+      <!-- Bouton "En savoir plus" -->
+      <div class="card-footer text-center">
+        <a href="{% url 'market:service_detail' services_marketing.slug %}" class="btn btn-primary">
+          En savoir plus
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+  {% comment %} web services  {% endcomment %}
+  <h5 class="text-muted pt-5">Services Web</h5>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for services_web in services_web %}
+  <div class="col">
+    <div class="card shadow-sm mb-4">
+      <!-- Image du service -->
+      <div class="card-header p-0">
+        <img src="{{ services_web.photo.url }}" alt="{{ services_web.titre }}" 
+             class="img-fluid rounded-top service-image">
+      </div>
+      
+      <!-- Contenu du service -->
+      <div class="card-body">
+        <h5 class="card-title">{{ services_web.titre }}</h5>
+        <p class="card-text text-muted">
+          {{ services_web.contenu|truncatewords:15 }} <!-- Limite à 15 mots -->
+        </p>
+      </div>
+  
+      <!-- Bouton "En savoir plus" -->
+      <div class="card-footer text-center">
+        <a href="{% url 'market:service_detail' services_web.slug %}" class="btn btn-primary">
+          En savoir plus
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+</div>
+
+{% endblock content %}

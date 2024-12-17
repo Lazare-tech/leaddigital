@@ -1,0 +1,184 @@
+{% extends "../admin/base.html" %}
+
+<title>{% block title %} Admin page {% endblock %}</title>
+{% block main %}
+
+<section class="mb-4">
+  <div class="card">
+    <div class="card-header text-center py-3">
+      <h5 class="mb-0 text-center" id="produit">
+        <strong>Inventaire des services</strong>
+      </h5>
+       {% if messages %} 
+       {% for message in messages %}
+      <div id="alertMessage">
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                  {{ message }}
+              </div>
+      </div>
+      {% endfor %}
+   {% endif %}
+      <div class="d-flex justify-content-end p-3">
+        <a href="{% url 'market:add_service' %}" class="btn btn-outline-success">
+          <i class="fas fa-plus fa-fw"></i><span>Ajouter un service</span>
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if service %}
+        <div class="table-responsive">
+          <table class="table table-hover text-nowrap">
+            <thead>
+              <tr>
+                <th scope="col">Categorie</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Contenu</th>
+                <th scope="col">Image</th>
+                <th scope="col">Date</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for service in service %}
+                <tr>
+                  <th scope="row">{{ service.service.nom_service }}</th>
+                  <td>{{ service.titre }}</td>
+                  <td>{{ service.contenu|truncatewords:10|safe }}</td>
+                  <td> 
+                    {% if service.photo %} 
+                      <img src="{{ service.photo.url }}" alt="{{ service.titre }}" 
+                      style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                      -----
+                    {% endif %}
+                  </td>
+                  <td>{{ service.date_ajout }}</td>
+                  <td>
+                    <a href="#" class="btn" data-mdb-toggle="modal" data-mdb-target="#modalDelete{{ service.slug }}">
+                      <i class="fas fa-trash text-danger fa-1x"></i>
+                    </a>
+                    <a href="{% url 'market:update_service' service.slug %}" class="btn" data-mdb-ripple-init>
+                      <i class="fas fa-pencil-alt fa-1x text-primary"></i>
+                    </a>
+                    <i class="far fa-eye fa-1x text-dark" data-mdb-toggle="modal" data-mdb-target="#modalDetails{{ service.slug }}" style="cursor: pointer;"   ></i>
+                  </td>
+                </tr>
+
+                <!-- Modal for displaying service details -->
+                <div class="modal fade" id="modalDetails{{ service.slug }}" tabindex="-1" aria-labelledby="detailsLabel{{ service.slug }}" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="detailsLabel{{ service.slug }}">{{ service.titre }}</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h6>Categorie: {{ service.service.nom_service }}</h6>
+                        <p><strong>Contenu:</strong> {{ service.contenu|safe }}</p>
+                        <p><strong>Date de publication:</strong> {{ service.date_publie }}</p>
+                        {% if service.photo %}
+                          <img src="{{ service.photo.url }}" alt="{{ service.titre }}" 
+                          style="width: 100%; height: auto; border-radius: 8px; object-fit: cover;">
+                        {% endif %}
+                      </div>
+                      <div class="modal-footer">
+                        <a href="{% url 'market:update_service' service.slug %}" class="btn btn-primary">Modifier</a>
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Fermer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-center">Aucun service. <a href="{% url 'market:add_service' %}">Ajoutez un service.</a></p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Modal de confirmation de suppression -->
+{% for service in service %}
+<div class="modal fade" id="modalDelete{{ service.slug }}" tabindex="-1" aria-labelledby="deleteLabel{{ service.slug }}" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white" id="deleteLabel{{ service.slug }}">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              Êtes-vous sûr de vouloir supprimer cet service ?
+          </div>
+          <div class="modal-footer">
+              <form action="{% url 'market:delete_service' service.slug %}" method="POST">
+                  {% csrf_token %}
+                  <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Annuler</button>
+                  <button type="submit" class="btn btn-danger">Supprimer</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+{% endfor %} 
+
+<div class="container mt-5">
+
+  <h4 class="text-center text-muted">Vos Adresses</h4>
+
+  {% if addresses %}
+  <div class="row">
+    {% for address in addresses %}
+
+    <div class="col-lg-6 col-md-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h2 class="card-title"><i class="fas fa-location-dot fa-2x text-danger px-3"></i> Adresse</h2>
+          <ul class="list-group list-group-light">
+            <li class="list-group-item px-3"><i class="fas fa-globe fa-fw text-success px-2"></i><strong class="px-2">VILLE :</strong><span>{{ address.ville }}</span></li>
+            <li class="list-group-item px-3"><i class="fas fa-layer-group fa-fw text-success px-2"></i><strong class="px-2">QUARTIER :</strong><span>{{ address.quartier }}</span></li>
+            <li class="list-group-item px-3"><i class="fas fa-flag fa-fw text-success px-2"></i><strong class="px-2">POINT DE RÉFÉRENCE :</strong><span>{{ address.repere }}</span></li>
+            <li class="list-group-item px-3"><i class="fas fa-phone fa-fw text-success px-2"></i><strong class="px-2">TÉLÉPHONE :</strong><span>{{ address.contact }}</span></li>
+          </ul>
+          <div class="btn-group shadow-0" role="group" aria-label="Basic example">
+            <a href="{% url 'market:update_adresse' address.id %}" class="btn btn-primary me-2">Mettre à jour</a>
+            <button type="button" class="btn btn-danger" data-mdb-toggle="modal" data-mdb-target="#deleteModal{{ address.id }}">Supprimer</button>
+          </div>
+        </div>
+      </div>
+      <!-- Delete Confirmation Modal -->
+      <div class="modal fade" id="deleteModal{{ address.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ address.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white" id="deleteModalLabel{{ address.id }}">Confirmation de suppression</h5>
+              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+              Êtes-vous sûr de vouloir supprimer cette adresse ?
+            </div>
+           
+            <div class="modal-footer">
+              <form action="{% url 'market:delete_adresse' address.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Annuler</button>
+                  <button type="submit" class="btn btn-danger">Supprimer</button>
+              </form>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  {% else %}
+
+    <p class="text-center">Aucune adresse trouvée. <a href="{% url 'market:create_adresse' %}">Ajouter une nouvelle adresse</a>.</p>
+  </div>
+
+  {% endif %}
+
+</div>
+{% endblock main %}
